@@ -1,0 +1,1 @@
+// Monster attracted to sounds
