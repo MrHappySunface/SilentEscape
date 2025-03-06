@@ -1,5 +1,5 @@
 // VR Hand Interactions
-
+/*
 using UnityEngine;  // Unity base library
 using UnityEngine.XR;  // XR Input detection
 using UnityEngine.XR.Interaction.Toolkit;  // VR interaction toolkit
@@ -33,3 +33,5 @@ public class HandInteraction : MonoBehaviour
         }
     }
 }
+
+*/

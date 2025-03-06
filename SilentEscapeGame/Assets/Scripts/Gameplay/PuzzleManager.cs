@@ -1,5 +1,5 @@
 // Puzzle handling
-
+/*
 using UnityEngine;  // Core Unity functions
 
 public class PuzzleManager : MonoBehaviour
@@ -19,3 +19,5 @@ public class PuzzleManager : MonoBehaviour
         }
     }
 }
+
+*/

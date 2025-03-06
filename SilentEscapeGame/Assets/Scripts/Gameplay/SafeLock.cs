@@ -1,5 +1,5 @@
 // LockCode to unlock the vault/door
-
+/*
 using UnityEngine;  // Core Unity functions
 using UnityEngine.UI;  // Handles UI elements
 using UnityEngine.Audio;  // Plays sound effects
@@ -41,3 +41,5 @@ public class SafeLock : MonoBehaviour
         displayText.text = "Unlocked!";
     }
 }
+
+*/

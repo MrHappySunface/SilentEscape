@@ -1,5 +1,5 @@
 // Player movement and interaction
-
+/*
 using UnityEngine;  // Core Unity functionalities
 using UnityEngine.XR;  // VR input detection
 using UnityEngine.XR.Interaction.Toolkit;  // VR hand interactions
@@ -41,3 +41,5 @@ public class PlayerController : MonoBehaviour
         Instantiate(sonarWavePrefab, waveSpawnPoint.position, Quaternion.identity);
     }
 }
+
+*/

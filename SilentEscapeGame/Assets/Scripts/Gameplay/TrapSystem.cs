@@ -1,5 +1,5 @@
 // Traps, tripwires, glassess, etc..
-
+/*
 using UnityEngine;  // Core Unity functions
 
 public class TrapSystem : MonoBehaviour
@@ -33,3 +33,5 @@ public class TrapSystem : MonoBehaviour
         player.GetComponent<PlayerController>().speed = 3.0f;
     }
 }
+
+*/
