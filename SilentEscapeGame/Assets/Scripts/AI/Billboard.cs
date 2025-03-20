@@ -1,21 +1,21 @@
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class Billboard : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        Vector3 rotation = Quaternion.LookRotation(Camera.main.transform.position).eulerAngles;
-        rotation.y = 0f;
+        // Get the camera position
+        Vector3 cameraPosition = Camera.main.transform.position;
 
-        transform.rotation = Quaternion.Euler(rotation);
-        transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward);
+        // Make the monster face the camera, but only on the Y-axis
+        Vector3 direction = cameraPosition - transform.position;
+        direction.y = 0f;  // Ignore the vertical component
+
+        // Apply the rotation
+        if (direction != Vector3.zero)
+        {
+            Quaternion rotation = Quaternion.LookRotation(direction);
+            transform.rotation = rotation;
+        }
     }
 }
