@@ -9,7 +9,7 @@ public class Billboard : MonoBehaviour
 
         // Make the monster face the camera, but only on the Y-axis
         Vector3 direction = cameraPosition - transform.position;
-        direction.y = 0f;  // Ignore the vertical component
+        direction.y = -90f;  // Ignore the vertical component
 
         // Apply the rotation
         if (direction != Vector3.zero)
