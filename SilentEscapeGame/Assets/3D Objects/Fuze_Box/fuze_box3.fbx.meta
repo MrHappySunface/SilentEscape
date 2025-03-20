@@ -1,9 +1,24 @@
 fileFormatVersion: 2
-guid: 1622fb29251ed428b859bde52ad143cb
+guid: 17d44ed3bf27b4e1a85e4b1dd1660113
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert2
+    second: {fileID: 2100000, guid: c176e8bd379224fa2b6a0d23fd584eea, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert3
+    second: {fileID: 2100000, guid: d3658f6b9edd342c5ac1c38096dc31be, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert4
+    second: {fileID: 2100000, guid: a2c8db5fc21a0446786c76ba1b3f6dc5, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -51,7 +66,7 @@ ModelImporter:
     keepQuads: 0
     weldVertices: 1
     bakeAxisConversion: 0
-    preserveHierarchy: 1
+    preserveHierarchy: 0
     skinWeightsMode: 0
     maxBonesPerVertex: 4
     minBoneWeight: 0.001

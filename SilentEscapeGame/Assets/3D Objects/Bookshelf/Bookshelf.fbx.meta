@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: 3d7848b6947b84d17876abdd8bd78c32
+guid: 2653dbc8027a44e4798a55d81822acaf
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BookshelfM
+    second: {fileID: 2100000, guid: 3f6e3ab2a9b83432cbd1a25f33f7f11b, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
