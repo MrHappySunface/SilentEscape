@@ -1,3 +1,4 @@
+/*
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,16 +7,21 @@ public class MonsterAI : MonoBehaviour
     public static MonsterAI Instance { get; private set; }
 
     [Header("AI Settings")]
-    public float patrolRadius = 10f; 
-    public float chaseSpeed = 4f;  
+    public float patrolRadius = 10f;
+    public float chaseSpeed = 4f;
     public float patrolSpeed = 2f;
-    public float chaseDuration = 5f;
+    public float chaseDuration = 10f; 
+    public float fieldOfViewAngle = 60f; 
+    public float visionDistance = 10f; 
     public Transform[] patrolPoints;
-
+    
     private NavMeshAgent agent;
     private Transform player;
     private bool isChasing = false;
     private float chaseTimer = 0f;
+    private AudioSource audioSource;
+    private AudioClip footstepSound;
+    public AudioClip monsterRoar;
 
     private void Awake()
     {
@@ -32,19 +38,41 @@ public class MonsterAI : MonoBehaviour
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        audioSource = GetComponent<AudioSource>();
 
-        // Ensure the player object is correctly assigned
+        footstepSound = Resources.Load<AudioClip>("Audio/footstep_wood");
+        if (footstepSound == null)
+        {
+            Debug.LogError("MonsterAI: Could not find footstep_wood sound in Resources/Audio folder!");
+        }
+
         player = GameObject.FindWithTag("Player")?.transform;
         if (player == null)
         {
             Debug.LogError("MonsterAI: Player not found! Ensure Player GameObject has 'Player' tag.");
         }
 
-        Patrol();
+        if (!agent.isOnNavMesh)
+        {
+            Debug.LogWarning("MonsterAI: Not on a NavMesh! Attempting reposition...");
+            ValidateNavMeshPosition();
+        }
+
+        if (agent.isOnNavMesh)
+        {
+            Patrol();
+        }
+        else
+        {
+            Debug.LogError("MonsterAI: Still not on NavMesh after repositioning. Check spawn point.");
+        }
     }
 
     private void Update()
     {
+        if (agent == null || !agent.isOnNavMesh)
+            return;
+
         if (isChasing)
         {
             chaseTimer -= Time.deltaTime;
@@ -57,27 +85,67 @@ public class MonsterAI : MonoBehaviour
         {
             Patrol();
         }
+
+        if (CanSeePlayer())
+        {
+            StartChasing();
+        }
+
+        if (agent.velocity.magnitude > 0.1f)
+        {
+            PlayFootsteps();
+        }
     }
 
     public void AlertMonster(Vector3 soundPosition)
     {
-        if (!isChasing)
+        if (!isChasing && agent.isOnNavMesh)
         {
             agent.speed = chaseSpeed;
             agent.SetDestination(soundPosition);
             isChasing = true;
             chaseTimer = chaseDuration;
+            Debug.Log("Monster is alerted by sound and moving towards: " + soundPosition);
         }
     }
 
-    public void StartChasing()
+    private void Patrol()
     {
-        if (player != null)
+        if (!agent.isOnNavMesh) return;
+
+        if (patrolPoints.Length > 0)
+        {
+            int randomIndex = Random.Range(0, patrolPoints.Length);
+            agent.speed = patrolSpeed;
+            agent.SetDestination(patrolPoints[randomIndex].position);
+        }
+        else
+        {
+            Vector3 randomPoint = transform.position + Random.insideUnitSphere * patrolRadius;
+            randomPoint.y = transform.position.y;
+
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(randomPoint, out hit, patrolRadius, NavMesh.AllAreas))
+            {
+                agent.speed = patrolSpeed;
+                agent.SetDestination(hit.position);
+            }
+        }
+    }
+
+    private void StartChasing()
+    {
+        if (player != null && agent.isOnNavMesh)
         {
             agent.speed = chaseSpeed;
             agent.SetDestination(player.position);
             isChasing = true;
             chaseTimer = chaseDuration;
+
+            if (monsterRoar != null)
+            {
+                audioSource.PlayOneShot(monsterRoar);
+            }
         }
     }
 
@@ -88,32 +156,193 @@ public class MonsterAI : MonoBehaviour
         Patrol();
     }
 
+    private bool CanSeePlayer()
+    {
+        if (player == null)
+            return false;
+
+        Vector3 directionToPlayer = (player.position - transform.position).normalized;
+        float angle = Vector3.Angle(transform.forward, directionToPlayer);
+
+        if (angle < fieldOfViewAngle) 
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, directionToPlayer, out hit, visionDistance))
+            {
+                if (hit.collider.CompareTag("Player"))
+                {
+                    return true; 
+                }
+            }
+        }
+        return false;
+    }
+
+    private void PlayFootsteps()
+    {
+        if (!audioSource.isPlaying && footstepSound != null && agent.velocity.magnitude > 0.1f)
+        {
+            audioSource.PlayOneShot(footstepSound);
+        }
+    }
+
+    private void ValidateNavMeshPosition()
+    {
+        if (agent.isOnNavMesh) return;
+
+        Debug.LogWarning("MonsterAI: NavMeshAgent is not on a NavMesh! Attempting reposition...");
+
+        NavMeshHit hit;
+        float searchRadius = 50f;
+
+        if (NavMesh.SamplePosition(transform.position, out hit, searchRadius, NavMesh.AllAreas))
+        {
+            agent.Warp(hit.position);
+            transform.position = hit.position;
+            Debug.Log($"MonsterAI repositioned to: {hit.position}");
+        }
+        else
+        {
+            Debug.LogError("MonsterAI: Could not find a valid NavMesh position nearby! Increase NavMesh coverage.");
+        }
+    }
+}
+
+*/
+
+using UnityEngine;
+using UnityEngine.AI;
+
+public class MonsterAI : MonoBehaviour
+{
+    public static MonsterAI Instance { get; private set; }
+
+    [Header("AI Settings")]
+    public float patrolRadius = 10f;
+    public float patrolSpeed = 2f;
+    public Transform[] patrolPoints;
+
+    private NavMeshAgent agent;
+    private AudioSource audioSource;
+    private AudioClip footstepSound;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        audioSource = GetComponent<AudioSource>();
+
+        footstepSound = Resources.Load<AudioClip>("Audio/footstep_wood");
+        if (footstepSound == null)
+        {
+            Debug.LogError("MonsterAI: Could not find footstep_wood sound in Resources/Audio folder!");
+        }
+
+        if (!agent.isOnNavMesh)
+        {
+            Debug.LogWarning("MonsterAI: Not on a NavMesh! Attempting reposition...");
+            ValidateNavMeshPosition();
+        }
+
+        // Start patrolling immediately
+        InvokeRepeating("Patrol", 1f, 5f);
+        Patrol();
+    }
+
+    private void Update()
+    {
+        if (agent == null || !agent.isOnNavMesh)
+            return;
+
+        if (agent.velocity.magnitude > 0.1f)
+        {
+            PlayFootsteps();
+        }
+
+        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        {
+            Patrol();
+        }
+    }
+
     private void Patrol()
     {
+        if (!agent.isOnNavMesh) return;
+
         if (patrolPoints.Length > 0)
         {
             int randomIndex = Random.Range(0, patrolPoints.Length);
+            agent.speed = patrolSpeed;
             agent.SetDestination(patrolPoints[randomIndex].position);
         }
         else
         {
+            // Move to a random point if no patrol points are set
             Vector3 randomPoint = transform.position + Random.insideUnitSphere * patrolRadius;
             randomPoint.y = transform.position.y;
-            agent.SetDestination(randomPoint);
+
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(randomPoint, out hit, patrolRadius, NavMesh.AllAreas))
+            {
+                agent.speed = patrolSpeed;
+                agent.SetDestination(hit.position);
+            }
         }
     }
 
-    // Initialize Instance inside a static method to resolve UDR0002 warning
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void InitializeMonsterAI()
+    public void AlertMonster(Vector3 soundPosition)
     {
-        if (Instance == null)
+        Debug.Log("Monster heard a sound at: " + soundPosition);
+
+        if (agent.isOnNavMesh)
         {
-            Instance = Object.FindFirstObjectByType<MonsterAI>();
-            if (Instance == null)
+            agent.speed = patrolSpeed;
+            agent.SetDestination(soundPosition);
+
+            if (!audioSource.isPlaying && footstepSound != null)
             {
-                Debug.LogWarning("MonsterAI: No MonsterAI instance found in scene.");
+                audioSource.PlayOneShot(footstepSound);
             }
+        }
+    }
+
+    private void PlayFootsteps()
+    {
+        if (!audioSource.isPlaying && footstepSound != null)
+        {
+            audioSource.PlayOneShot(footstepSound);
+        }
+    }
+
+    private void ValidateNavMeshPosition()
+    {
+        if (agent.isOnNavMesh) return;
+
+        Debug.LogWarning("MonsterAI: NavMeshAgent is not on a NavMesh! Attempting reposition...");
+
+        NavMeshHit hit;
+        float searchRadius = 50f;
+
+        if (NavMesh.SamplePosition(transform.position, out hit, searchRadius, NavMesh.AllAreas))
+        {
+            agent.Warp(hit.position);
+            transform.position = hit.position;
+            Debug.Log($"MonsterAI repositioned to: {hit.position}");
+        }
+        else
+        {
+            Debug.LogError("MonsterAI: Could not find a valid NavMesh position nearby! Increase NavMesh coverage.");
         }
     }
 }

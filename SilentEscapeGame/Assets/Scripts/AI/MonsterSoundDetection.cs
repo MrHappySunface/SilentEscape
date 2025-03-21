@@ -11,6 +11,7 @@ public class MonsterSoundDetection : MonoBehaviour
     private NavMeshAgent agent;
     private bool isAlerted = false;
     private float alertTimer = 0f;
+    private float cooldownTimer = 0f;
 
     void Start()
     {
@@ -27,15 +28,33 @@ public class MonsterSoundDetection : MonoBehaviour
                 isAlerted = false;
             }
         }
+
+        if (cooldownTimer > 0)
+        {
+            cooldownTimer -= Time.deltaTime;
+        }
     }
 
     public void DetectSound(Vector3 soundPosition, float soundIntensity)
     {
+        if (cooldownTimer > 0) return;
+
         float distanceToSound = Vector3.Distance(transform.position, soundPosition);
 
         if (distanceToSound <= detectionRadius * soundIntensity && !isAlerted)
         {
-            MonsterAI.Instance.AlertMonster(soundPosition);
+            if (MonsterAI.Instance != null)
+            {
+                MonsterAI.Instance.AlertMonster(soundPosition);
+                isAlerted = true;
+                alertTimer = attentionSpan;
+                cooldownTimer = soundCooldown;
+                Debug.Log("Monster detected a sound at " + soundPosition);
+            }
+            else
+            {
+                Debug.LogError("MonsterAI Instance is NULL! Ensure MonsterAI is in the scene.");
+            }
         }
     }
 }
