@@ -13,7 +13,7 @@ public class BackgroundSoundManager : MonoBehaviour
 
         if (backgroundSound == null)
         {
-            Debug.LogError("BackgroundSoundManager: Could not find ambient_whisper.wav in Resources/Audio folder!");
+            Debug.LogError("BackgroundSoundManager: Could not find ambient_wind.wav in Resources/Audio folder!");
             return;
         }
 
