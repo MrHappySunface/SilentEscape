@@ -1,50 +1,29 @@
-// Puzzle handling
-/*
-using UnityEngine;  // Core Unity functions
+using UnityEngine;
+using System.Collections.Generic;
 
 public class PuzzleManager : MonoBehaviour
 {
-    public bool puzzleSolved = false;
-    public AudioSource puzzleCompleteSound;
-    public Light puzzleIndicator;
+    public static PuzzleManager Instance;
+    public List<PuzzleBase> puzzles = new List<PuzzleBase>();
+    public GameObject exitDoor;
 
-    public void SolvePuzzle()
+    void Awake() => Instance = this;
+
+    public void PuzzleCompleted(PuzzleBase puzzle)
     {
-        if (!puzzleSolved)
-        {
-            Debug.Log("Puzzle Solved!");
-            puzzleSolved = true;
-            puzzleCompleteSound.Play();
-            puzzleIndicator.color = Color.green;
-        }
+        if (AllSolved()) UnlockExit();
+    }
+
+    private bool AllSolved()
+    {
+        foreach (var puzzle in puzzles)
+            if (!puzzle.isSolved) return false;
+        return true;
+    }
+
+    private void UnlockExit()
+    {
+        Debug.Log("✅ All puzzles solved. Unlocking exit!");
+        if (exitDoor != null) exitDoor.SetActive(false);
     }
 }
-
-*/
-
-
-// Puzzle handling
-/*
-using UnityEngine;  // Core Unity functions
-
-public class PuzzleManager : MonoBehaviour
-{
-    public bool puzzleSolved = false;
-    public AudioSource puzzleCompleteSound;
-    public Light puzzleIndicator;
-
-    public void SolvePuzzle()
-    {
-        if (!puzzleSolved)
-        {
-            Debug.Log("Puzzle Solved!");
-            puzzleSolved = true;
-            puzzleCompleteSound.Play();
-            puzzleIndicator.color = Color.green;
-        }
-    }
-}
-
-*/
-
-

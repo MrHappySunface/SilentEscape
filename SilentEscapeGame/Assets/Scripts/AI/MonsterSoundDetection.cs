@@ -23,25 +23,19 @@ public class MonsterSoundDetection : MonoBehaviour
         if (isAlerted)
         {
             alertTimer -= Time.deltaTime;
-            if (alertTimer <= 0)
-            {
-                isAlerted = false;
-            }
+            if (alertTimer <= 0) isAlerted = false;
         }
 
-        if (cooldownTimer > 0)
-        {
-            cooldownTimer -= Time.deltaTime;
-        }
+        if (cooldownTimer > 0) cooldownTimer -= Time.deltaTime;
     }
 
     public void DetectSound(Vector3 soundPosition, float soundIntensity)
     {
-        if (cooldownTimer > 0) return;
+        if (cooldownTimer > 0 || isAlerted) return;
 
         float distanceToSound = Vector3.Distance(transform.position, soundPosition);
 
-        if (distanceToSound <= detectionRadius * soundIntensity && !isAlerted)
+        if (distanceToSound <= detectionRadius * soundIntensity)
         {
             if (MonsterAI.Instance != null)
             {

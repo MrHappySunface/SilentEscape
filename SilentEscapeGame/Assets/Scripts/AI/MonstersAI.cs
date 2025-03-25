@@ -228,14 +228,8 @@ public class MonsterAI : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
     private void Start()
@@ -245,35 +239,21 @@ public class MonsterAI : MonoBehaviour
 
         footstepSound = Resources.Load<AudioClip>("Audio/footstep_wood");
         if (footstepSound == null)
-        {
-            Debug.LogError("MonsterAI: Could not find footstep_wood sound in Resources/Audio folder!");
-        }
+            Debug.LogError("MonsterAI: Missing footstep_wood in Resources/Audio!");
 
-        if (!agent.isOnNavMesh)
-        {
-            Debug.LogWarning("MonsterAI: Not on a NavMesh! Attempting reposition...");
-            ValidateNavMeshPosition();
-        }
+        ValidateNavMeshPosition();
 
-        // Start patrolling immediately
         InvokeRepeating("Patrol", 1f, 5f);
         Patrol();
     }
 
     private void Update()
     {
-        if (agent == null || !agent.isOnNavMesh)
-            return;
+        if (!agent || !agent.isOnNavMesh) return;
 
-        if (agent.velocity.magnitude > 0.1f)
-        {
-            PlayFootsteps();
-        }
+        if (agent.velocity.magnitude > 0.1f) PlayFootsteps();
 
-        if (!agent.pathPending && agent.remainingDistance < 0.5f)
-        {
-            Patrol();
-        }
+        if (!agent.pathPending && agent.remainingDistance < 0.5f) Patrol();
     }
 
     private void Patrol()
@@ -282,18 +262,16 @@ public class MonsterAI : MonoBehaviour
 
         if (patrolPoints.Length > 0)
         {
-            int randomIndex = Random.Range(0, patrolPoints.Length);
+            int i = Random.Range(0, patrolPoints.Length);
             agent.speed = patrolSpeed;
-            agent.SetDestination(patrolPoints[randomIndex].position);
+            agent.SetDestination(patrolPoints[i].position);
         }
         else
         {
-            // Move to a random point if no patrol points are set
-            Vector3 randomPoint = transform.position + Random.insideUnitSphere * patrolRadius;
-            randomPoint.y = transform.position.y;
+            Vector3 point = transform.position + Random.insideUnitSphere * patrolRadius;
+            point.y = transform.position.y;
 
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(randomPoint, out hit, patrolRadius, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(point, out NavMeshHit hit, patrolRadius, NavMesh.AllAreas))
             {
                 agent.speed = patrolSpeed;
                 agent.SetDestination(hit.position);
@@ -303,17 +281,16 @@ public class MonsterAI : MonoBehaviour
 
     public void AlertMonster(Vector3 soundPosition)
     {
-        Debug.Log("Monster heard a sound at: " + soundPosition);
+        Debug.Log("Monster heard sound at: " + soundPosition);
 
-        if (agent.isOnNavMesh)
+        if (!agent.isOnNavMesh) return;
+
+        agent.speed = patrolSpeed;
+        agent.SetDestination(soundPosition);
+
+        if (!audioSource.isPlaying && footstepSound != null)
         {
-            agent.speed = patrolSpeed;
-            agent.SetDestination(soundPosition);
-
-            if (!audioSource.isPlaying && footstepSound != null)
-            {
-                audioSource.PlayOneShot(footstepSound);
-            }
+            audioSource.PlayOneShot(footstepSound);
         }
     }
 
@@ -329,12 +306,7 @@ public class MonsterAI : MonoBehaviour
     {
         if (agent.isOnNavMesh) return;
 
-        Debug.LogWarning("MonsterAI: NavMeshAgent is not on a NavMesh! Attempting reposition...");
-
-        NavMeshHit hit;
-        float searchRadius = 50f;
-
-        if (NavMesh.SamplePosition(transform.position, out hit, searchRadius, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 50f, NavMesh.AllAreas))
         {
             agent.Warp(hit.position);
             transform.position = hit.position;
@@ -342,7 +314,7 @@ public class MonsterAI : MonoBehaviour
         }
         else
         {
-            Debug.LogError("MonsterAI: Could not find a valid NavMesh position nearby! Increase NavMesh coverage.");
+            Debug.LogError("MonsterAI: Could not find valid NavMesh position nearby!");
         }
     }
 }
