@@ -674,9 +674,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4498012425679156142, guid: 106d33cc1db5247d999d1bc41bc83cca, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4498012425679156142, guid: 106d33cc1db5247d999d1bc41bc83cca, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: dabc13d3198674b7abe46793295decfa, type: 2}
+    - target: {fileID: 4498012425679156142, guid: 106d33cc1db5247d999d1bc41bc83cca, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6c7e553016a70c2448950bbf0dfc0014, type: 2}
     - target: {fileID: 4712053091985519399, guid: 106d33cc1db5247d999d1bc41bc83cca, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -702,9 +710,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: dabc13d3198674b7abe46793295decfa, type: 2}
     - target: {fileID: 8581651147442491381, guid: 106d33cc1db5247d999d1bc41bc83cca, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8581651147442491381, guid: 106d33cc1db5247d999d1bc41bc83cca, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: dabc13d3198674b7abe46793295decfa, type: 2}
+    - target: {fileID: 8581651147442491381, guid: 106d33cc1db5247d999d1bc41bc83cca, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6c7e553016a70c2448950bbf0dfc0014, type: 2}
     - target: {fileID: 8808303388725632557, guid: 106d33cc1db5247d999d1bc41bc83cca, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -1966,6 +1982,14 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 2653dbc8027a44e4798a55d81822acaf, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 2653dbc8027a44e4798a55d81822acaf, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6c7e553016a70c2448950bbf0dfc0014, type: 2}
     - target: {fileID: 919132149155446097, guid: 2653dbc8027a44e4798a55d81822acaf, type: 3}
       propertyPath: m_Name
       value: Bookshelf
