@@ -4,7 +4,7 @@ using System.Collections;
 public class SonarLightSpawner : MonoBehaviour
 {
     public GameObject sonarLightPrefab;
-    public float spawnInterval = 6f;
+    public float spawnInterval = 2f;
     public float spawnRadius = 20f;
     public float yHeight = 1.5f;
 
