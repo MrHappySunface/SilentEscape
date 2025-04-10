@@ -45,8 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ca4ddb229ef04ece867bbae95d0d982, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  expandSpeed: 5
-  lifetime: 3
+  expandSpeed: 200
+  lifetime: 0.5
+  detectionRadiusMultiplier: 0.5
   pingSound: {fileID: 0}
 --- !u!1 &6689288142476191741
 GameObject:
@@ -97,7 +98,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6689288142476191741}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
