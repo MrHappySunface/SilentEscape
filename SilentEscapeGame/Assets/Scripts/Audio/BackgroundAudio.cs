@@ -9,11 +9,11 @@ public class BackgroundSoundManager : MonoBehaviour
         audioSource = gameObject.AddComponent<AudioSource>();
 
         // Load the ambient_whisper.wav from Resources/Audio
-        AudioClip backgroundSound = Resources.Load<AudioClip>("Audio/ambient_wind");
+        AudioClip backgroundSound = Resources.Load<AudioClip>("Audio/monster_breathing");
 
         if (backgroundSound == null)
         {
-            Debug.LogError("BackgroundSoundManager: Could not find ambient_wind.wav in Resources/Audio folder!");
+            Debug.LogError("BackgroundSoundManager: Could not find monster_breathing.wav in Resources/Audio folder!");
             return;
         }
 

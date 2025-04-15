@@ -9,12 +9,29 @@ public class VRSonarTrigger : MonoBehaviour
     public float sonarIntensity = 1f;
     public float sonarCooldown = 3f;
     public GameObject sonarWavePrefab;
+    public Transform sonarOriginTransform; // Assign right/left hand here
 
     [Header("Trigger Type")]
     public bool useControllerInput = true;
     public bool useHeadMovement = false;
 
     private float cooldownTimer = 0f;
+    private InputDevice leftHand;
+    private InputDevice rightHand;
+
+    void Start()
+    {
+        var leftDevices = new List<InputDevice>();
+        var rightDevices = new List<InputDevice>();
+        InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.Left | InputDeviceCharacteristics.Controller, leftDevices);
+        InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.Right | InputDeviceCharacteristics.Controller, rightDevices);
+
+        if (leftDevices.Count > 0) leftHand = leftDevices[0];
+        if (rightDevices.Count > 0) rightHand = rightDevices[0];
+
+        if (!leftHand.isValid) Debug.LogWarning("Left hand controller not found.");
+        if (!rightHand.isValid) Debug.LogWarning("Right hand controller not found.");
+    }
 
     void Update()
     {
@@ -22,7 +39,7 @@ public class VRSonarTrigger : MonoBehaviour
 
         if (cooldownTimer <= 0f)
         {
-            if (useControllerInput && IsTriggerPressed())
+            if (useControllerInput && (IsTriggerPressed(leftHand) || IsTriggerPressed(rightHand)))
             {
                 EmitSonar();
             }
@@ -34,25 +51,14 @@ public class VRSonarTrigger : MonoBehaviour
         }
     }
 
-    private bool IsTriggerPressed()
+    private bool IsTriggerPressed(InputDevice device)
     {
-        List<InputDevice> devices = new List<InputDevice>();
-        InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.Right | InputDeviceCharacteristics.Controller, devices);
-
-        foreach (var device in devices)
-        {
-            if (device.TryGetFeatureValue(CommonUsages.triggerButton, out bool pressed) && pressed)
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return device.isValid && device.TryGetFeatureValue(CommonUsages.triggerButton, out bool pressed) && pressed;
     }
 
     void EmitSonar()
     {
-        Vector3 origin = transform.position;
+        Vector3 origin = sonarOriginTransform ? sonarOriginTransform.position : transform.position;
 
         Collider[] hits = Physics.OverlapSphere(origin, sonarRadius);
         foreach (var hit in hits)
@@ -62,14 +68,21 @@ public class VRSonarTrigger : MonoBehaviour
             {
                 detector.DetectSound(origin, sonarIntensity);
             }
+
+            var glow = hit.GetComponent<SonarInteractable>();
+            if (glow != null)
+            {
+                glow.TriggerGlow(1.5f);
+            }
         }
 
         if (sonarWavePrefab != null)
         {
-            Instantiate(sonarWavePrefab, origin, Quaternion.identity);
+            GameObject wave = Instantiate(sonarWavePrefab, origin, Quaternion.identity);
+            Destroy(wave, 3f);
         }
 
-        Debug.Log("🎯 Sonar Pulse Emitted from VR Player");
+        Debug.Log("🎯 Sonar Pulse Emitted from: " + origin);
         cooldownTimer = sonarCooldown;
     }
 
