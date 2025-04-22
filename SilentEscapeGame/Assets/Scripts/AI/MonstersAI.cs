@@ -10,12 +10,7 @@ public class MonsterAI : MonoBehaviour
     public float patrolSpeed = 2f;
     public Transform[] patrolPoints;
 
-    [Header("Audio")]
-    public AudioClip breathingSound;
-
     private NavMeshAgent agent;
-    private AudioSource audioSource;
-    private bool isBreathing = false;
 
     private void Awake()
     {
@@ -26,27 +21,9 @@ public class MonsterAI : MonoBehaviour
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        audioSource = GetComponent<AudioSource>();
-
-        if (breathingSound == null)
-        {
-            breathingSound = Resources.Load<AudioClip>("Audio/monster_breathing");
-            if (breathingSound == null)
-            {
-                Debug.LogError("MonsterAI: Breathing sound not found in Resources/Audio!");
-            }
-        }
-
-        if (audioSource != null && breathingSound != null)
-        {
-            audioSource.clip = breathingSound;
-            audioSource.loop = true;
-            audioSource.playOnAwake = false;
-        }
-
         ValidateNavMeshPosition();
 
-        InvokeRepeating("Patrol", 1f, 5f);
+        InvokeRepeating(nameof(Patrol), 1f, 5f);
         Patrol();
     }
 
@@ -54,36 +31,9 @@ public class MonsterAI : MonoBehaviour
     {
         if (!agent || !agent.isOnNavMesh) return;
 
-        if (agent.velocity.magnitude > 0.1f)
-        {
-            PlayBreathing();
-        }
-        else
-        {
-            StopBreathing();
-        }
-
         if (!agent.pathPending && agent.remainingDistance < 0.5f)
         {
             Patrol();
-        }
-    }
-
-    private void PlayBreathing()
-    {
-        if (!isBreathing && audioSource != null && breathingSound != null)
-        {
-            audioSource.Play();
-            isBreathing = true;
-        }
-    }
-
-    private void StopBreathing()
-    {
-        if (isBreathing && audioSource != null)
-        {
-            audioSource.Stop();
-            isBreathing = false;
         }
     }
 

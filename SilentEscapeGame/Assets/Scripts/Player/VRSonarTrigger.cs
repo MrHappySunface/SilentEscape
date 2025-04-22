@@ -19,6 +19,9 @@ public class VRSonarTrigger : MonoBehaviour
     private InputDevice leftHand;
     private InputDevice rightHand;
 
+    private Quaternion previousHeadRotation;
+    public float headTurnThreshold = 60f; // degrees per second
+
     void Start()
     {
         var leftDevices = new List<InputDevice>();
@@ -31,6 +34,13 @@ public class VRSonarTrigger : MonoBehaviour
 
         if (!leftHand.isValid) Debug.LogWarning("Left hand controller not found.");
         if (!rightHand.isValid) Debug.LogWarning("Right hand controller not found.");
+
+        // Initialize previous head rotation for head turn detection
+        var headDevice = InputDevices.GetDeviceAtXRNode(XRNode.Head);
+        if (headDevice.TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion rot))
+        {
+            previousHeadRotation = rot;
+        }
     }
 
     void Update()
@@ -39,12 +49,27 @@ public class VRSonarTrigger : MonoBehaviour
 
         if (cooldownTimer <= 0f)
         {
+            bool sonarTriggered = false;
+
             if (useControllerInput && (IsTriggerPressed(leftHand) || IsTriggerPressed(rightHand)))
             {
-                EmitSonar();
+                sonarTriggered = true;
             }
 
             if (useHeadMovement && DetectQuickHeadTurn())
+            {
+                sonarTriggered = true;
+            }
+
+#if UNITY_EDITOR
+            if (UnityEngine.InputSystem.Keyboard.current.gKey.wasPressedThisFrame)
+            {
+                Debug.Log("Simulated sonar triggered with G key.");
+                sonarTriggered = true;
+            }
+#endif
+
+            if (sonarTriggered)
             {
                 EmitSonar();
             }
@@ -88,10 +113,12 @@ public class VRSonarTrigger : MonoBehaviour
 
     private bool DetectQuickHeadTurn()
     {
-        if (InputDevices.GetDeviceAtXRNode(XRNode.Head).TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion rot))
+        var headDevice = InputDevices.GetDeviceAtXRNode(XRNode.Head);
+        if (headDevice.TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion currentRot))
         {
-            Vector3 headEuler = rot.eulerAngles;
-            return Mathf.Abs(headEuler.y) > 60f;
+            float angleDelta = Quaternion.Angle(previousHeadRotation, currentRot);
+            previousHeadRotation = currentRot;
+            return angleDelta / Time.deltaTime > headTurnThreshold;
         }
         return false;
     }

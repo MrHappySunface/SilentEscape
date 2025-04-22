@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(AudioSource))]
 public class SonarLightEffect : MonoBehaviour
 {
     public float expandSpeed = 5f;
     public float lifetime = 3f;
     public float detectionRadiusMultiplier = 0.5f;
-    public AudioClip pingSound;
 
     private AudioSource audioSource;
     private HashSet<GameObject> hitObjects = new HashSet<GameObject>();
@@ -14,8 +14,18 @@ public class SonarLightEffect : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        if (pingSound && audioSource)
+
+        // Load ping sound from Resources/Audio/ping
+        AudioClip pingSound = Resources.Load<AudioClip>("Audio/ping");
+
+        if (pingSound != null && audioSource != null)
+        {
             audioSource.PlayOneShot(pingSound);
+        }
+        else
+        {
+            Debug.LogWarning("Ping sound not found in Resources/Audio/ping or AudioSource missing.");
+        }
 
         Destroy(gameObject, lifetime);
     }
@@ -34,7 +44,7 @@ public class SonarLightEffect : MonoBehaviour
                 SonarInteractable interactable = hit.GetComponent<SonarInteractable>();
                 if (interactable != null)
                 {
-                    interactable.TriggerGlow(3f); // Highlight for 1 second
+                    interactable.TriggerGlow(3f);
                     hitObjects.Add(hit.gameObject);
                 }
             }
