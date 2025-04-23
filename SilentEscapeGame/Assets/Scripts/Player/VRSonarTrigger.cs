@@ -24,16 +24,7 @@ public class VRSonarTrigger : MonoBehaviour
 
     void Start()
     {
-        var leftDevices = new List<InputDevice>();
-        var rightDevices = new List<InputDevice>();
-        InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.Left | InputDeviceCharacteristics.Controller, leftDevices);
-        InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.Right | InputDeviceCharacteristics.Controller, rightDevices);
-
-        if (leftDevices.Count > 0) leftHand = leftDevices[0];
-        if (rightDevices.Count > 0) rightHand = rightDevices[0];
-
-        if (!leftHand.isValid) Debug.LogWarning("Left hand controller not found.");
-        if (!rightHand.isValid) Debug.LogWarning("Right hand controller not found.");
+        RefreshDevices();
 
         // Initialize previous head rotation for head turn detection
         var headDevice = InputDevices.GetDeviceAtXRNode(XRNode.Head);
@@ -45,13 +36,16 @@ public class VRSonarTrigger : MonoBehaviour
 
     void Update()
     {
+        // Refresh devices if invalid (e.g., after sleep)
+        if (!leftHand.isValid || !rightHand.isValid)
+            RefreshDevices();
+
         cooldownTimer -= Time.deltaTime;
+        bool sonarTriggered = false;
 
         if (cooldownTimer <= 0f)
         {
-            bool sonarTriggered = false;
-
-            if (useControllerInput && (IsTriggerPressed(leftHand) || IsTriggerPressed(rightHand)))
+            if (useControllerInput && (IsPrimaryButtonPressed(leftHand) || IsPrimaryButtonPressed(rightHand)))
             {
                 sonarTriggered = true;
             }
@@ -61,13 +55,12 @@ public class VRSonarTrigger : MonoBehaviour
                 sonarTriggered = true;
             }
 
-#if UNITY_EDITOR
-            if (UnityEngine.InputSystem.Keyboard.current.gKey.wasPressedThisFrame)
+            // Fallback for editor or desktop testing
+            if (Input.GetKeyDown(KeyCode.G))
             {
                 Debug.Log("Simulated sonar triggered with G key.");
                 sonarTriggered = true;
             }
-#endif
 
             if (sonarTriggered)
             {
@@ -76,9 +69,29 @@ public class VRSonarTrigger : MonoBehaviour
         }
     }
 
-    private bool IsTriggerPressed(InputDevice device)
+    private void RefreshDevices()
     {
-        return device.isValid && device.TryGetFeatureValue(CommonUsages.triggerButton, out bool pressed) && pressed;
+        var leftDevices = new List<InputDevice>();
+        var rightDevices = new List<InputDevice>();
+        InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.Left | InputDeviceCharacteristics.Controller, leftDevices);
+        InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.Right | InputDeviceCharacteristics.Controller, rightDevices);
+
+        if (leftDevices.Count > 0) leftHand = leftDevices[0];
+        if (rightDevices.Count > 0) rightHand = rightDevices[0];
+
+        if (!leftHand.isValid) Debug.LogWarning("❌ Left hand controller not found.");
+        if (!rightHand.isValid) Debug.LogWarning("❌ Right hand controller not found.");
+    }
+
+    private bool IsPrimaryButtonPressed(InputDevice device)
+    {
+        if (device.isValid && device.TryGetFeatureValue(CommonUsages.primaryButton, out bool pressed))
+        {
+            if (pressed)
+                Debug.Log($"✅ {device.name} primary button pressed.");
+            return pressed;
+        }
+        return false;
     }
 
     void EmitSonar()
