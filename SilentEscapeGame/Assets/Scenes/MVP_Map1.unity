@@ -3534,6 +3534,7 @@ GameObject:
   - component: {fileID: 628454124}
   - component: {fileID: 628454123}
   - component: {fileID: 628454122}
+  - component: {fileID: 628454128}
   m_Layer: 5
   m_Name: pCylinder1 (2)
   m_TagString: Untagged
@@ -3686,7 +3687,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 628454120}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 0.2
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -3793,6 +3794,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 628454120}
   m_Mesh: {fileID: -5076798556035486163, guid: 13ef5a122543e4cef80dbbc2ac299740, type: 3}
+--- !u!114 &628454128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 628454120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fcd0183131444a98baf9e2160815b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sonarLightPrefab: {fileID: 953899146580522807, guid: 74e5220c9c0ef4a619ce5c8e954edd07, type: 3}
 --- !u!1001 &632016643
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6437,6 +6451,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3779745573541866595, guid: 13ef5a122543e4cef80dbbc2ac299740, type: 3}
       insertIndex: -1
       addedObject: {fileID: 869747468}
+    - targetCorrespondingSourceObject: {fileID: 3779745573541866595, guid: 13ef5a122543e4cef80dbbc2ac299740, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 869747475}
   m_SourcePrefab: {fileID: 100100000, guid: 13ef5a122543e4cef80dbbc2ac299740, type: 3}
 --- !u!4 &869747466 stripped
 Transform:
@@ -6578,7 +6595,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 869747467}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 0.2
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -6632,6 +6649,19 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5076798556035486163, guid: 13ef5a122543e4cef80dbbc2ac299740, type: 3}
+--- !u!114 &869747475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 869747467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fcd0183131444a98baf9e2160815b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sonarLightPrefab: {fileID: 953899146580522807, guid: 74e5220c9c0ef4a619ce5c8e954edd07, type: 3}
 --- !u!1 &878848282 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5333798378542438985, guid: 106d33cc1db5247d999d1bc41bc83cca, type: 3}
@@ -6816,6 +6846,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   glowMaterial: {fileID: 2100000, guid: 6c7e553016a70c2448950bbf0dfc0014, type: 2}
+--- !u!1001 &909290971
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 953899146580522807, guid: 74e5220c9c0ef4a619ce5c8e954edd07, type: 3}
+      propertyPath: m_Name
+      value: BottleLight
+      objectReference: {fileID: 0}
+    - target: {fileID: 953899146580522807, guid: 74e5220c9c0ef4a619ce5c8e954edd07, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2055904124992640455, guid: 74e5220c9c0ef4a619ce5c8e954edd07, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2055904124992640455, guid: 74e5220c9c0ef4a619ce5c8e954edd07, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2055904124992640455, guid: 74e5220c9c0ef4a619ce5c8e954edd07, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.765
+      objectReference: {fileID: 0}
+    - target: {fileID: 2055904124992640455, guid: 74e5220c9c0ef4a619ce5c8e954edd07, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2055904124992640455, guid: 74e5220c9c0ef4a619ce5c8e954edd07, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2055904124992640455, guid: 74e5220c9c0ef4a619ce5c8e954edd07, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2055904124992640455, guid: 74e5220c9c0ef4a619ce5c8e954edd07, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2055904124992640455, guid: 74e5220c9c0ef4a619ce5c8e954edd07, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2055904124992640455, guid: 74e5220c9c0ef4a619ce5c8e954edd07, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2055904124992640455, guid: 74e5220c9c0ef4a619ce5c8e954edd07, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 74e5220c9c0ef4a619ce5c8e954edd07, type: 3}
 --- !u!135 &930586555
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -8819,7 +8910,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9190,7 +9281,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1442064162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9611,6 +9702,7 @@ GameObject:
   - component: {fileID: 1542585682}
   - component: {fileID: 1542585681}
   - component: {fileID: 1542585680}
+  - component: {fileID: 1542585686}
   m_Layer: 5
   m_Name: pCylinder1 (3)
   m_TagString: Untagged
@@ -9763,7 +9855,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1542585678}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 0.2
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -9870,6 +9962,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1542585678}
   m_Mesh: {fileID: -5076798556035486163, guid: 13ef5a122543e4cef80dbbc2ac299740, type: 3}
+--- !u!114 &1542585686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542585678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fcd0183131444a98baf9e2160815b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sonarLightPrefab: {fileID: 953899146580522807, guid: 74e5220c9c0ef4a619ce5c8e954edd07, type: 3}
 --- !u!65 &1561210258
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11972,6 +12077,7 @@ GameObject:
   - component: {fileID: 1993176164}
   - component: {fileID: 1993176163}
   - component: {fileID: 1993176162}
+  - component: {fileID: 1993176168}
   m_Layer: 5
   m_Name: pCylinder1 (1)
   m_TagString: Untagged
@@ -12124,7 +12230,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1993176160}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 0.2
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -12231,6 +12337,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1993176160}
   m_Mesh: {fileID: -5076798556035486163, guid: 13ef5a122543e4cef80dbbc2ac299740, type: 3}
+--- !u!114 &1993176168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993176160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fcd0183131444a98baf9e2160815b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sonarLightPrefab: {fileID: 953899146580522807, guid: 74e5220c9c0ef4a619ce5c8e954edd07, type: 3}
 --- !u!1001 &2001806522
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13209,5 +13328,6 @@ SceneRoots:
   - {fileID: 971421688}
   - {fileID: 1033690495}
   - {fileID: 7932712440316925729}
+  - {fileID: 909290971}
   - {fileID: 770779366}
   - {fileID: 2428676729700629974}
